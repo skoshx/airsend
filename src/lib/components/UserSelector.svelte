@@ -7,12 +7,10 @@
 	import Text from "./Text.svelte";
 	import Title from "./Title.svelte";
 	import Upload from "./Upload.svelte";
-	import { parse } from 'cookie';
 	import { sendFile } from "$lib/network";
+	import { peer } from '$lib/stores';
 
 	let localPeers: string[][] = [];
-
-	let peer: any;
 
 	onMount(async () => {
 		// we need to do this dance with aranged peers & local
@@ -21,18 +19,6 @@
 		arangedPeers.subscribe((arangedPeers) => {
 			localPeers = arangedPeers;
 		});
-
-		const { Peer } = await import('peerjs');
-		const userId = parse(document.cookie)?.['userid'];
-		peer = new Peer(userId, /*{
-			host: '/',
-			port: 9000,
-		}*/);
-
-		/* peer.on('open', async () => {
-			username = deriveUsernameFromUuid(peer.id);
-			console.log("My ID: ", peer.id); 
-		}); */
 	});
 
 	function handleUpload(peerId: string, file: File) {
@@ -40,10 +26,8 @@
 		console.log("FILE ");
 		console.log(file.name);
 
-		const connection = peer.connect(peerId, { reliable: true });
-		console.log("Connection");
-		console.log(connection);
-		sendFile(file, connection);
+		const connection = $peer.connect(peerId, { reliable: true });
+		connection.on('open', () => sendFile(file, connection, $peer.id));
 	}
 
 	const getOffset = (index: number) => index * 112;

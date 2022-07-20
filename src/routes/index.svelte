@@ -7,35 +7,35 @@
 	import SunIcon from "heroicons/svelte/outline/SunIcon.svelte";
 	import Title from "$lib/components/Title.svelte";
 	import { onMount } from "svelte";
-	import { deriveUsernameFromUuid } from "$lib/names";
 	import { parse } from 'cookie';
 	import UserSelector from "$lib/components/UserSelector.svelte";
 	import { fade, fly, scale } from "svelte/transition";
 	import { quintOut } from "svelte/easing";
+	import { username } from "$lib/stores";
 
-	let username = '—';
+	// let username = '—';
 
 	onMount(async () => {
 		const { Peer } = await import('peerjs');
 		const userId = parse(document.cookie)?.['userid'];
-		const peer = new Peer(userId, {
+		/* const peer = new Peer(userId, {
 			host: '/',
 			port: 9000,
-		});
+		}); */
 
-		peer.on('open', async () => {
+		/* peer.on('open', async () => {
 			username = deriveUsernameFromUuid(peer.id);
 			console.log("My ID: ", peer.id);
-		});
+		}); */
 
-		peer.on('connection', (connection) => {
+		/* peer.on('connection', (connection) => {
 			alert("NEW CONNECTION ");
 			connection.on('data', (data) => {
 				alert(`Received N Bytes: ${JSON.stringify(data).length}`);
 				console.log("Data ");
 				console.log(data);
 			});
-		});
+		}); */
 	});
 </script>
 
@@ -60,7 +60,7 @@
 		</div>
 	</div>
 
-	<div class="w-full flex-1 flex flex-col items-center justify-center relative">
+	<div class="w-full flex-1 flex flex-col items-center justify-center relative max-w-3xl mx-auto">
 		{#if $peers.length === 0}
 		<div transition:fly={{duration: 600, easing: quintOut}} class="space-y-2 w-2/3">
 			<Title textAlign="center" level={3}>Airdrop</Title>
@@ -74,7 +74,7 @@
 	<div class="space-y-4 flex flex-col items-center py-8">
 		<div class="w-12 h-12 rounded-full bg-blue-400"></div>
 		<div class="space-y-2">
-			<Title textAlign="center">You are known as {username}</Title>
+			<Title textAlign="center">You are known as {$username ? $username : '—'}</Title>
 			<NetworkSelector />
 		</div>
 	</div>

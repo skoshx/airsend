@@ -1,5 +1,9 @@
 import { browser } from '$app/env';
+import { parse } from 'cookie';
+import type Peer from 'peerjs';
 import { derived, readable, writable } from 'svelte/store';
+import { deriveUsernameFromUuid } from './names';
+import type { ReceivedFileType } from './network';
 import { get, getEndpoint } from './util';
 
 /* export const dark = writable(
@@ -7,8 +11,15 @@ import { get, getEndpoint } from './util';
 ); */
 export const dark = writable(false);
 
+// Network
 export type NetworkType = 'anyone' | 'network';
 export const network = writable<NetworkType>('network');
+
+export const fileQueue = writable<ReceivedFileType[]>([]);
+
+export const peer = writable<Peer>();
+
+export const username = derived(peer, $peer => $peer ? deriveUsernameFromUuid($peer.id) : undefined);
 
 export const peers = readable<string[]>([], (set) => {
 	const interval = setInterval(async () => {

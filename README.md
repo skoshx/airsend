@@ -1,5 +1,6 @@
 ## TODO
 
+-> improve `deriveUsernameFromId()`
 -> paste file from clipboard:
 ```typescript
 _onPaste(e) {
