@@ -3,7 +3,7 @@ import { parse } from 'cookie';
 import type Peer from 'peerjs';
 import { derived, readable, writable } from 'svelte/store';
 import { deriveUsernameFromUuid } from './names';
-import type { ReceivedFileType } from './network';
+import type { NewReceivedFile, ReceivedFileType } from './network';
 import { get, getEndpoint } from './util';
 
 /* export const dark = writable(
@@ -15,7 +15,15 @@ export const dark = writable(false);
 export type NetworkType = 'anyone' | 'network';
 export const network = writable<NetworkType>('network');
 
-export const fileQueue = writable<ReceivedFileType[]>([]);
+export const fileQueue = writable<NewReceivedFile[]>([]);
+
+
+export interface SendProgress {
+	receiverId: string;
+	progress: number;
+}
+
+export const sendProgress = writable<SendProgress[]>([]);
 
 export const peer = writable<Peer>();
 

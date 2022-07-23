@@ -6,55 +6,28 @@
 	import MoonIcon from "heroicons/svelte/outline/MoonIcon.svelte";
 	import SunIcon from "heroicons/svelte/outline/SunIcon.svelte";
 	import Title from "$lib/components/Title.svelte";
-	import { onMount } from "svelte";
-	import { parse } from 'cookie';
 	import UserSelector from "$lib/components/UserSelector.svelte";
-	import { fade, fly, scale } from "svelte/transition";
+	import { fly } from "svelte/transition";
 	import { quintOut } from "svelte/easing";
 	import { username } from "$lib/stores";
-
-	// let username = '—';
-
-	onMount(async () => {
-		const { Peer } = await import('peerjs');
-		const userId = parse(document.cookie)?.['userid'];
-		/* const peer = new Peer(userId, {
-			host: '/',
-			port: 9000,
-		}); */
-
-		/* peer.on('open', async () => {
-			username = deriveUsernameFromUuid(peer.id);
-			console.log("My ID: ", peer.id);
-		}); */
-
-		/* peer.on('connection', (connection) => {
-			alert("NEW CONNECTION ");
-			connection.on('data', (data) => {
-				alert(`Received N Bytes: ${JSON.stringify(data).length}`);
-				console.log("Data ");
-				console.log(data);
-			});
-		}); */
-	});
 </script>
 
 <div class="flex flex-col h-screen">
 	<!-- Header -->
-	<div class="w-full h-14 mx-8 flex items-center">
+	<div class="w-full h-14 px-8 flex items-center">
 		<div class="space-x-2 flex items-center">
-			<a class="p-2 hover:bg-gray-200 transition-colors block rounded-full" target="_blank" href="https://github.com/skoshx/airdrop">
-				<StarIcon class="w-5 h-5 text-black" />
+			<a class="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors block rounded-full" target="_blank" href="https://github.com/skoshx/airdrop">
+				<StarIcon class="w-5 h-5 text-black dark:text-white" />
 			</a>
 
 			<!-- Theme switcher -->
-			<div class="p-2 hover:bg-gray-200 transition-colors block rounded-full" on:click={(e) => {
+			<div class="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors block rounded-full" on:click={(e) => {
 				dark.update((dark) => !dark);
 			}}>
 				{#if $dark}
-				<SunIcon class="w-5 h-5 text-black" />
+				<SunIcon class="w-5 h-5 text-black dark:text-white" />
 				{:else}
-				<MoonIcon class="w-5 h-5 text-black" />
+				<MoonIcon class="w-5 h-5 text-black dark:text-white" />
 				{/if}
 			</div>
 		</div>

@@ -1,5 +1,7 @@
 ## TODO
 
+-> `$ peerjs --port 9000 --key peerjs --allow_discovery`
+
 -> improve `deriveUsernameFromId()`
 -> paste file from clipboard:
 ```typescript

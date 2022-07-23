@@ -15,7 +15,7 @@
 <div class="flex items-center text-blue-400">
 	<Text>Allow me to be discovered by</Text>
 
-	<select value={localNetwork} class="text-sm outline-none" on:select={switchNetwork} on:change={switchNetwork}>
+	<select value={localNetwork} class="text-sm outline-none bg-transparent" on:select={switchNetwork} on:change={switchNetwork}>
 		<option value="anyone">anyone on Earth</option>
 		<option value="network">people on my network</option>
 	</select>

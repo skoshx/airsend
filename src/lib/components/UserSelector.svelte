@@ -9,6 +9,7 @@
 	import Upload from "./Upload.svelte";
 	import { sendFile } from "$lib/network";
 	import { peer } from '$lib/stores';
+import ProgressCircle from "./ProgressCircle.svelte";
 
 	let localPeers: string[][] = [];
 
@@ -27,7 +28,7 @@
 		console.log(file.name);
 
 		const connection = $peer.connect(peerId, { reliable: true });
-		connection.on('open', () => sendFile(file, connection, $peer.id));
+		connection.on('open', () => sendFile(file, connection, $peer.id, peerId));
 	}
 
 	const getOffset = (index: number) => index * 112;
@@ -39,7 +40,11 @@
 		{#each list as peerId, j}
 		<Upload on:upload={(event) => { handleUpload(peerId, event.detail.file ) }}>
 			<div transition:scale={{delay: i * 300 + j * 200, duration: 600, easing: quintOut }} class="flex flex-col justify-center items-center h-28 w-max mx-auto cursor-pointer select-none">
-				<img class="rounded-full w-12 h-12 object-cover" src={`https://avatars.dicebear.com/api/pixel-art/${peerId}.svg`} alt={`${deriveUsernameFromUuid(peerId)}'s profile`} />
+
+				<ProgressCircle {peerId}>
+					<img class="rounded-full w-12 h-12 object-cover" src={`https://avatars.dicebear.com/api/pixel-art/${peerId}.svg`} alt={`${deriveUsernameFromUuid(peerId)}'s profile`} />
+				</ProgressCircle>
+				<!-- <img class="rounded-full w-12 h-12 object-cover" src={`https://avatars.dicebear.com/api/pixel-art/${peerId}.svg`} alt={`${deriveUsernameFromUuid(peerId)}'s profile`} /> -->
 				<!-- https://avatars.dicebear.com/api/pixel-art/:seed.svg -->
 				<Title class="text-sm">{deriveUsernameFromUuid(peerId)}</Title>
 				<Text class="text-xs" type="secondary">Mac Chrome</Text>
