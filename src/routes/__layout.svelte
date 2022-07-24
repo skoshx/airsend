@@ -3,57 +3,63 @@
 	import { digestChunks } from '$lib/chunker';
 	import Download from '$lib/components/Download.svelte';
 	import type { NewReceivedFile, ReceivedChunk, ReceivedFileType } from '$lib/network';
-	import { dark, fileQueue, peer } from '$lib/stores';
+	import type { DataConnection } from '$lib/peerjs/dataconnection';
+	import { dark, fileQueue, network, peer } from '$lib/stores';
 	import { parse } from 'cookie';
-	import type { DataConnection } from 'peerjs';
 	import { onMount } from 'svelte';
-	
+
 	import '../app.css';
-	
+
 	dark.subscribe((isDarkMode) => {
 		if (browser && !isDarkMode) return document.documentElement.classList.remove('dark');
 		if (browser) document.documentElement.classList.add('dark');
 	});
-	
+
 	onMount(async () => {
 		window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event) => {
 			dark.set(event.matches);
 		});
-		
-		// Setup Peer
-		const { Peer } = await import('peerjs');
-		const userId = parse(document.cookie)?.['userid'];
-		const createdPeer = new Peer(userId, {
-			host: '/',
-			port: 9000,
-			// debug: 3
-		});
-		peer.set(createdPeer);
-		createdPeer.on('open', () => { console.log('open -- ') });
-		createdPeer.on('connection', (connection: DataConnection) => {
-			console.log('conection --');
-			connection.on('error', console.error);
-			// @ts-ignore
-			connection.on('data', (data: ReceivedChunk) => {
-				console.log("DATA ");
-				console.log(data);
-				function onComplete(blob: Blob) {
-					const receivedFile: NewReceivedFile = { ...data, blob };
-					fileQueue.update((queue) => [...queue, receivedFile]);
-				}
-				function onProgress(progress: number) {
-					console.log("Receive progress", progress * 100);
-				}
-				digestChunks(data, onComplete, onProgress);
-				/* const castedData = data as ReceivedFileType;
-				fileQueue.update((queue) => [...queue, castedData]); */
+
+		network.subscribe(async (currentNetwork) => {
+			// Setup Peer
+			const { Peer } = await import('$lib/peerjs/exports');
+			const userId = parse(document.cookie)?.['userid'];
+			console.log('Protocol', currentNetwork === 'anyone' ? 'global' : undefined);
+			const createdPeer = new Peer(userId, {
+				host: '/',
+				port: 9000,
+				protocol: currentNetwork === 'anyone' ? 'global' : undefined
+				// debug: 3
+			});
+			peer.set(createdPeer);
+			createdPeer.on('open', () => {
+				console.log('open -- ');
+			});
+			createdPeer.on('connection', (connection: DataConnection) => {
+				console.log('conection --');
+				connection.on('error', console.error);
+				// @ts-ignore
+				connection.on('data', (data: ReceivedChunk) => {
+					console.log('DATA ');
+					console.log(data);
+					function onComplete(blob: Blob) {
+						const receivedFile: NewReceivedFile = { ...data, blob };
+						fileQueue.update((queue) => [...queue, receivedFile]);
+					}
+					function onProgress(progress: number) {
+						console.log('Receive progress', progress * 100);
+					}
+					digestChunks(data, onComplete, onProgress);
+					/* const castedData = data as ReceivedFileType;
+					fileQueue.update((queue) => [...queue, castedData]); */
+				});
+			});
+			createdPeer.on('error', (e) => {
+				// if (e.toString().includes('is taken')) location.reload();
+				console.error(e);
 			});
 		});
-		createdPeer.on('error', (e) => {
-			if (e.toString().includes('is taken')) location.reload();
-			console.error(e);
-		});
-		
+
 		// Background animations
 		// TODO: Extract to component
 		let c = document.createElement('canvas');
@@ -66,7 +72,7 @@
 		style.left = 0;
 		let ctx: any = c.getContext('2d');
 		let x0: any, y0: any, w: any, h: any, dw: any;
-		
+
 		function init() {
 			w = window.innerWidth;
 			h = window.innerHeight;
@@ -80,7 +86,7 @@
 			drawCircles();
 		}
 		window.onresize = init;
-		
+
 		function drawCircle(radius: any) {
 			ctx.beginPath();
 			let color = Math.round(255 * (1 - radius / Math.max(w, h)));
@@ -89,29 +95,29 @@
 			ctx.stroke();
 			ctx.lineWidth = 2;
 		}
-		
+
 		let step = 0;
-		
+
 		function drawCircles() {
 			ctx.clearRect(0, 0, w, h);
 			for (let i = 0; i < 12; i++) {
-				drawCircle(dw * i + step % dw);
+				drawCircle(dw * i + (step % dw));
 			}
 			step += 1;
 		}
-		
+
 		let loading = true;
-		
+
 		function animate() {
 			if (loading || step % dw < dw - 5) {
-				requestAnimationFrame(function() {
+				requestAnimationFrame(function () {
 					drawCircles();
 					animate();
 				});
 			}
 		}
 		// @ts-ignore
-		window.animateBackground = function(l) {
+		window.animateBackground = function (l) {
 			loading = l;
 			animate();
 		};

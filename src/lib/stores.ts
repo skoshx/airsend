@@ -1,55 +1,55 @@
 import { browser } from '$app/env';
-import { parse } from 'cookie';
-import type Peer from 'peerjs';
 import { derived, readable, writable } from 'svelte/store';
 import { deriveUsernameFromUuid } from './names';
-import type { NewReceivedFile, ReceivedFileType } from './network';
+import type { NewReceivedFile } from './network';
 import { get, getEndpoint } from './util';
+import { get as getStore } from 'svelte/store';
+import type { Peer } from './peerjs/peer';
+import type { Client, NetworkType, SendProgress } from './types';
 
-/* export const dark = writable(
+export const dark = writable(
 	browser && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-); */
-export const dark = writable(false);
+);
 
 // Network
-export type NetworkType = 'anyone' | 'network';
-export const network = writable<NetworkType>('network');
+export const network = writable<NetworkType>(
+	browser && localStorage.getItem('network')
+		? (localStorage.getItem('network') as NetworkType)
+		: 'network'
+);
+
+network.subscribe((updatedNetwork) => {
+	if (browser) localStorage.setItem('network', updatedNetwork);
+});
 
 export const fileQueue = writable<NewReceivedFile[]>([]);
-
-
-export interface SendProgress {
-	receiverId: string;
-	progress: number;
-}
 
 export const sendProgress = writable<SendProgress[]>([]);
 
 export const peer = writable<Peer>();
 
-export const username = derived(peer, $peer => $peer ? deriveUsernameFromUuid($peer.id) : undefined);
+export const username = derived(peer, ($peer) =>
+	$peer ? deriveUsernameFromUuid($peer.id ?? '') : undefined
+);
 
-export const peers = readable<string[]>([], (set) => {
+export const peers = readable<Client[]>([], (set) => {
 	const interval = setInterval(async () => {
-		const { data: peers, error } = await get<string[]>(getEndpoint() + '/peers');
+		const networkEndpoint = getStore(network) === 'network' ? '/network' : '/peers';
+		const { data: peers, error } = await get<Client[]>(getEndpoint() + networkEndpoint);
 		if (error) throw Error(`could not find other peers: ${error}`);
 		if (!peers) throw Error(`peers is null`);
-		// if (error) return alert(`Error: ${error}`);
-		// if (!peers) return alert('not peers');
 		set(peers);
 	}, 1_000);
 	return () => clearInterval(interval);
 });
 
-// export const peers = writable(['1233232124-a32342wd2a', '1233232124-a32342wd2a', '1233232124-a32342wd2a']);
-
-export const arangedPeers = derived(peers, $peers => {
+export const arangedPeers = derived(peers, ($peers) => {
 	let peersCopy = [...$peers];
-	const aranged: string[][] = [];
+	const aranged: Client[][] = [];
 	if ($peers.length < 3) return [$peers];
 	for (let i = 2; i <= $peers.length; i++) {
 		aranged.push(peersCopy.slice(0, i));
 		peersCopy = peersCopy.slice(i);
 	}
-	return aranged.filter((peers: string[]) => peers.length !== 0);
+	return aranged.filter((peers: Client[]) => peers.length !== 0);
 });

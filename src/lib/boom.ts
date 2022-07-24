@@ -1,6 +1,6 @@
 // TODO: Boom class
 
-import type { RequestHandlerOutput } from "@sveltejs/kit";
+import type { RequestHandlerOutput } from '@sveltejs/kit';
 
 export const errorCodes = new Map([
 	[100, 'Continue'],

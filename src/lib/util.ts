@@ -1,4 +1,4 @@
-import type { BoomReturnType } from "./boom";
+import type { BoomReturnType } from './boom';
 
 export interface RequestResponse<DataType, ErrorType> {
 	data: DataType | null;
