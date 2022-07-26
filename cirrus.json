@@ -5,7 +5,8 @@
       "name": "airdrop-server",
 			"path": ".",
 			"port": 9000,
-      "build": "npm run build:server"
+      "build": "npm run build:server",
+      "start": "npm run start:server"
 		}
 	]
 }
