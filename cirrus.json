@@ -1,0 +1,11 @@
+{
+	"name": "airdrop",
+	"deployments": [
+		{
+      "name": "airdrop-server",
+			"path": ".",
+			"port": 9000,
+      "build": "npm run build:server"
+		}
+	]
+}

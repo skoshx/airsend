@@ -5,6 +5,7 @@
 		"dev": "vite dev --port 3000",
 		"build": "vite build",
 		"build:server": "tsup server/index.ts",
+    "start:server": "node dist/index.cjs",
 		"package": "svelte-kit package",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync",
