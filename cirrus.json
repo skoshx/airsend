@@ -6,7 +6,7 @@
 			"path": ".",
 			"port": 9000,
       "build": "npm run build:server",
-      "start": "npm run start:server"
+      "start": "start:server"
 		}
 	]
 }
