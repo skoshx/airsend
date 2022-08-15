@@ -6,14 +6,16 @@
 			"path": ".",
 			"port": 9000,
       "build": "npm run build:server",
-      "start": "npm run start:server"
+      "start": "npm run start:server",
+      "domain": "api.airdrop.skoshx.com"
 		},
 		{
       "name": "airdrop-web",
 			"path": ".",
 			"port": 3001,
       "build": "npm run build",
-      "start": "npm run start"
+      "start": "npm run start",
+      "domain": "airdrop.skoshx.com"
 		}
 	]
 }
