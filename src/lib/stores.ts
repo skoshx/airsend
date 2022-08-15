@@ -1,11 +1,10 @@
 import { browser } from '$app/env';
 import { derived, readable, writable } from 'svelte/store';
 import { deriveUsernameFromUuid } from './names';
-import type { NewReceivedFile } from './network';
 import { get, getEndpoint } from './util';
 import { get as getStore } from 'svelte/store';
 import type { Peer } from './peerjs/peer';
-import type { Client, NetworkType, SendProgress } from './types';
+import type { Client, NetworkType, NewReceivedFile, SendProgress } from './types';
 
 export const dark = writable(
 	browser && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches

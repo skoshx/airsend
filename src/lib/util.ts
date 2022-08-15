@@ -1,3 +1,4 @@
+import { dev } from '$app/env';
 import type { BoomReturnType } from './boom';
 
 export interface RequestResponse<DataType, ErrorType> {
@@ -68,5 +69,5 @@ export async function get<DataType = unknown, ErrorType = BoomReturnType>(
 
 // http://localhost:9000/peerjs/peers
 export function getEndpoint() {
-	return `${location.protocol}//${location.hostname}:9000/peerjs`;
+	return dev ? `${location.protocol}//${location.hostname}:9000/peerjs` : `https://overrated-substance-production.up.railway.app/peerjs`;
 }

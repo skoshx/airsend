@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { browser } from '$app/env';
+	import { browser, dev } from '$app/env';
 	import { digestChunks } from '$lib/chunker';
 	import Download from '$lib/components/Download.svelte';
 	import type { NewReceivedFile, ReceivedChunk, ReceivedFileType } from '$lib/network';
@@ -26,8 +26,10 @@
 			const userId = parse(document.cookie)?.['userid'];
 			console.log('Protocol', currentNetwork === 'anyone' ? 'global' : undefined);
 			const createdPeer = new Peer(userId, {
-				host: '/',
-				port: 9000,
+				// host: '/',
+				// port: 9000,
+				host: dev ? '/' : 'overrated-substance-production.up.railway.app',
+				port: dev ? 9000 : 443,
 				protocol: currentNetwork === 'anyone' ? 'global' : undefined
 				// debug: 3
 			});
