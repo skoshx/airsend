@@ -743,7 +743,8 @@ function PeerServer(options = {}, callback) {
   return peerjs;
 }
 var opts = {
-  allow_discovery: true
+  allow_discovery: true,
+  port: process.env.PORT ? parseInt(process.env.PORT) : 9e3
 };
 var userPath = "/";
 var version = "1.4.5";

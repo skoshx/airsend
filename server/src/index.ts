@@ -66,7 +66,8 @@ function PeerServer(options: Optional<IConfig> = {}, callback?: (server: Server)
 export { ExpressPeerServer, PeerServer };
 
 const opts: Optional<IConfig> = {
-	allow_discovery: true
+	allow_discovery: true,
+	port: process.env.PORT ? parseInt(process.env.PORT) : 9000,
 };
 const userPath = '/';
 const version = '1.4.5';
