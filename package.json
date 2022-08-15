@@ -6,6 +6,7 @@
 		"build": "vite build",
 		"build:server": "tsup server/index.ts",
 		"start:server": "node dist/index.cjs",
+		"start": "node build/index.js",
 		"package": "svelte-kit package",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync",
