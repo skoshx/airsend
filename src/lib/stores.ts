@@ -6,9 +6,8 @@ import { get as getStore } from 'svelte/store';
 import type { Peer } from './peerjs/peer';
 import type { Client, NetworkType, NewReceivedFile, SendProgress } from './types';
 
-export const dark = writable(
-	browser && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-);
+export const dark = writable(browser && localStorage.getItem('theme') === 'dark' ? true : false);
+
 
 // Network
 export const network = writable<NetworkType>(

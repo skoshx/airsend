@@ -1,21 +1,21 @@
 {
-	"name": "airdrop",
+	"name": "airsend",
 	"deployments": [
 		{
-      "name": "airdrop-server",
+      "name": "airsend-server",
 			"path": ".",
 			"port": 9000,
       "build": "npm run build:server",
       "start": "npm run start:server",
-      "domain": "api.airdrop.skoshx.com"
+      "domain": "api.airsend.skoshx.com"
 		},
 		{
-      "name": "airdrop-web",
+      "name": "airsend-web",
 			"path": ".",
 			"port": 3001,
       "build": "npm run build",
       "start": "npm run start",
-      "domain": "airdrop.skoshx.com"
+      "domain": "airsend.skoshx.com"
 		}
 	]
 }

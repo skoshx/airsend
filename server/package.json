@@ -1,5 +1,5 @@
 {
-	"name": "airdrop-server",
+	"name": "airsend-server",
 	"version": "0.0.1",
 	"scripts": {
 		"build": "tsup src/index.ts",

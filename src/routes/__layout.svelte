@@ -2,7 +2,6 @@
 	import { browser, dev } from '$app/env';
 	import { digestChunks } from '$lib/chunker';
 	import Download from '$lib/components/Download.svelte';
-	import type { NewReceivedFile, ReceivedChunk, ReceivedFileType } from '$lib/network';
 	import type { DataConnection } from '$lib/peerjs/dataconnection';
 	import { dark, fileQueue, network, peer } from '$lib/stores';
 	import { parse } from 'cookie';
@@ -11,6 +10,7 @@
 	import '../app.css';
 
 	dark.subscribe((isDarkMode) => {
+		if (browser) localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
 		if (browser && !isDarkMode) return document.documentElement.classList.remove('dark');
 		if (browser) document.documentElement.classList.add('dark');
 	});
@@ -24,26 +24,17 @@
 			// Setup Peer
 			const { Peer } = await import('$lib/peerjs/exports');
 			const userId = parse(document.cookie)?.['userid'];
-			console.log('Protocol', currentNetwork === 'anyone' ? 'global' : undefined);
 			const createdPeer = new Peer(userId, {
-				// host: '/',
-				// port: 9000,
 				host: dev ? '/' : 'overrated-substance-production.up.railway.app',
 				port: dev ? 9000 : 443,
 				protocol: currentNetwork === 'anyone' ? 'global' : undefined
-				// debug: 3
 			});
 			peer.set(createdPeer);
-			createdPeer.on('open', () => {
-				console.log('open -- ');
-			});
+			createdPeer.on('open', () => {});
 			createdPeer.on('connection', (connection: DataConnection) => {
-				console.log('conection --');
 				connection.on('error', console.error);
 				// @ts-ignore
 				connection.on('data', (data: ReceivedChunk) => {
-					console.log('DATA ');
-					console.log(data);
 					function onComplete(blob: Blob) {
 						const receivedFile: NewReceivedFile = { ...data, blob };
 						fileQueue.update((queue) => [...queue, receivedFile]);
@@ -52,19 +43,15 @@
 						console.log('Receive progress', progress * 100);
 					}
 					digestChunks(data, onComplete, onProgress);
-					/* const castedData = data as ReceivedFileType;
-					fileQueue.update((queue) => [...queue, castedData]); */
 				});
 			});
 			createdPeer.on('error', (e) => {
-				// if (e.toString().includes('is taken')) location.reload();
 				console.error(e);
 			});
 		});
 
-		// Background animations
-		// TODO: Extract to component
-		let c = document.createElement('canvas');
+		// Background animations (TODO: Extract to component)
+		const c = document.createElement('canvas');
 		document.body.appendChild(c);
 		let style: any = c.style;
 		style.width = '100%';
@@ -72,18 +59,16 @@
 		style.zIndex = -1;
 		style.top = 0;
 		style.left = 0;
-		let ctx: any = c.getContext('2d');
-		let x0: any, y0: any, w: any, h: any, dw: any;
+		const ctx: CanvasRenderingContext2D = c.getContext('2d') as CanvasRenderingContext2D;
+		let x0: number, y0: number, w: number, h: number, dw: number;
 
 		function init() {
 			w = window.innerWidth;
 			h = window.innerHeight;
 			c.width = w;
 			c.height = h;
-			let offset = h > 380 ? 100 : 65;
-			offset = h > 800 ? 116 : offset;
 			x0 = w / 2;
-			y0 = h - offset;
+			y0 = h - 123;
 			dw = Math.max(w, h, 1000) / 13;
 			drawCircles();
 		}
@@ -118,11 +103,6 @@
 				});
 			}
 		}
-		// @ts-ignore
-		window.animateBackground = function (l) {
-			loading = l;
-			animate();
-		};
 		init();
 		animate();
 	});

@@ -47,7 +47,7 @@
 			class="backdrop-blur-xl bg-white/50 dark:bg-black/50 p-4 rounded-xl flex flex-col justify-center space-y-4 w-72 fixed"
 		>
 			<div class="space-y-2">
-				<Title textAlign="center">Airdrop</Title>
+				<Title textAlign="center">Airsend</Title>
 				<Text type="secondary" textAlign="center"
 					>{deriveUsernameFromUuid($fileQueue[0].senderId)} want's to send you a file.</Text
 				>
