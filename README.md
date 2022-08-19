@@ -1,51 +1,29 @@
-## TODO
+# Airsend
 
--> test with HTTPS
--> crossfade animations for peers
--> multiple files at once
--> improve `deriveUsernameFromId()` -> use random name generator…
--> blog post?
--> deploy
+> 📦 Airsend allows you to share files of any size securely with co-workers, friends & family.
 
-## Notes
+[![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/skoshx/airsend/blob/main/LICENSE.md)
+[![prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/skoshx/airsend/blob/main/README.md)
 
--> The PeerJS library is a slightly modified version of `PeerJS` library, the code is in this current repository while waiting for the feature PR to be merged upstream.
+Airsend allows you to share files  of any size securely with co-workers, friends & family, to anywhere on the planet. With Airsend, you can share files regardless of what device you & the recipient uses, as well as regardless of how far away on the Earth you might be.
 
-# create-svelte
+Airsend only acts as an intermediary of the peer-to-peer connection & NEVER stores any information related to files sent over Airsend.
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+## How does it work?
 
-## Creating a project
+There are two modes, network mode & global mode.
 
-If you're seeing this, you've probably already done this step. Congrats!
+**Network mode:** People on your network are shown, for easy discovery
 
-```bash
-# create a new project in the current directory
-npm init svelte
+**Global mode:** People on the whole planet are shown, and you are able to send files to anyone no matter how far away they might be.
 
-# create a new project in my-app
-npm init svelte my-app
-```
+## Features
 
-## Developing
+- Secure
+- No filesize limits
+- No loss of quality
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+## License
 
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+`airsend` is released under the [MIT License](https://opensource.org/licenses/MIT).
