@@ -5,6 +5,7 @@
 -> multiple files at once
 -> improve `deriveUsernameFromId()` -> use random name generator…
 -> blog post?
+-> deploy
 
 ## Notes
 
